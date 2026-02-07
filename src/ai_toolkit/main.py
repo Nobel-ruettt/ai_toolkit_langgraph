@@ -2,7 +2,7 @@ import click
 from dotenv import load_dotenv
 from ai_toolkit.model_helper import get_model
 
-from .commands import commit
+from .commands import commit, review
 
 @click.group()
 @click.option(
@@ -38,6 +38,7 @@ def hello(ctx):
 
 # Register the commit command
 cli.add_command(commit)
+cli.add_command(review)
 
 cli.add_command(hello)
 

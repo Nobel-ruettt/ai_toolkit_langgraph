@@ -50,7 +50,6 @@ class GitHelper:
         repo = GitHelper.get_repo()
         try:
             diff_output = repo.git.diff("--staged")
-            diff_output = diff_output.strip()
             return diff_output if diff_output else None
         except GitCommandError as e:
             # Optionally log or handle the error here
@@ -63,11 +62,31 @@ class GitHelper:
         """Return the uncommitted diff (equivalent to `git diff`).
 
         Returns None when there are no uncommitted changes.
+        Includes untracked files in the diff output.
         """
         repo = GitHelper.get_repo()
         try:
+            # Get diff of tracked files
             diff_output = repo.git.diff()
-            diff_output = diff_output.strip()
+            
+            # Get untracked files
+            untracked_files = repo.untracked_files
+            
+            # If there are untracked files, append their content to diff
+            if untracked_files:
+                untracked_diff = "\n\n# Untracked files:\n"
+                for file_path in untracked_files:
+                    untracked_diff += f"\n+++ b/{file_path}\n"
+                    try:
+                        with open(repo.working_dir + "/" + file_path, 'r', encoding='utf-8', errors='ignore') as f: # type: ignore
+                            content = f.read()
+                            for line in content.splitlines():
+                                untracked_diff += f"+{line}\n"
+                    except Exception:
+                        untracked_diff += f"(binary or unreadable file)\n"
+                
+                diff_output = (diff_output + untracked_diff) if diff_output else untracked_diff
+            
             return diff_output if diff_output else None
         except GitCommandError as e:
             # Optionally log or handle the error here

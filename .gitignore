@@ -12,3 +12,5 @@ venv/
 scratchpad.md
 scratchpadUdemy.md
 .pytest_cache/
+.reviews/
+reviews/
