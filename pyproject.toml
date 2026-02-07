@@ -1,19 +1,22 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=61.0", "wheel", "build"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ai_toolkit-nobel"
+name = "ai-toolkit-langgraph"
 version = "0.1.0"
-description = "Utilities for git and review helping."
+description = "AI-powered toolbox for code review and git utilities using LangChain"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [ { name = "Nurul Islam Nobel", email = "nobelnurulislam@gmail.com" } ]
 license = { file = "LICENSE" }
+keywords = ["ai", "langchain", "code-review", "git", "cli"]
 classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 
@@ -22,6 +25,7 @@ dependencies = [
     "click>=8.0",
     "python-dotenv>=1.0.0",
     "GitPython==3.1.45",
+    "pydantic>=1.10,<3",
     "langchain-anthropic>=0.3.10",
     "langchain-community>=0.3.20",
     "langchain-experimental>=0.3.4",
@@ -35,11 +39,24 @@ dependencies = [
     "langchain>=1.2.8",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "build>=0.10",
+    "twine>=4.0",
+    "black>=24.0",
+    "ruff>=0.15,<0.19",
+    "mypy>=1.2",
+]
+
 [project.scripts]
 ai-toolbox = "ai_toolkit.main:cli"
 
 [project.urls]
 Homepage = "https://github.com/Nobel-ruettt/ai_toolkit_langgraph"
+Repository = "https://github.com/Nobel-ruettt/ai_toolkit_langgraph"
+Issues = "https://github.com/Nobel-ruettt/ai_toolkit_langgraph/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
