@@ -4,6 +4,7 @@ warnings.filterwarnings("ignore", category=ResourceWarning, module="subprocess")
 
 from typing import Optional, Literal
 from git import Repo, GitCommandError
+from pathlib import Path
 
 
 DiffMode = Literal["staged", "uncommitted"]
@@ -78,10 +79,14 @@ class GitHelper:
                 for file_path in untracked_files:
                     untracked_diff += f"\n+++ b/{file_path}\n"
                     try:
-                        with open(repo.working_dir + "/" + file_path, 'r', encoding='utf-8', errors='ignore') as f: # type: ignore
-                            content = f.read()
-                            for line in content.splitlines():
-                                untracked_diff += f"+{line}\n"
+                        file_full_path = Path(repo.working_dir) / file_path
+                        if file_full_path.exists() and file_full_path.is_file():
+                            with open(file_full_path, 'r', encoding='utf-8', errors='ignore') as f:
+                                content = f.read()
+                                for line in content.splitlines():
+                                    untracked_diff += f"+{line}\n"
+                        else:
+                            untracked_diff += f"(file not found or not accessible)\n"
                     except Exception:
                         untracked_diff += f"(binary or unreadable file)\n"
                 
